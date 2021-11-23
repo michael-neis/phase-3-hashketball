@@ -127,3 +127,68 @@ def game_hash
 end
 
 # Write code here
+
+HOME = game_hash[:home]
+AWAY = game_hash[:away]
+
+def num_points_scored(name)
+  player = player_stats(name)
+  player[:points]
+end
+
+def shoe_size(name)
+  player = player_stats(name)
+  player[:shoe]
+end
+
+def player_stats(name)
+  player = HOME[:players].find {|player| name == player[:player_name]}
+  if !player
+    player = AWAY[:players].find {|player| name == player[:player_name]}
+  end
+  player
+end
+
+def team_colors(team_name)
+  HOME[:team_name] == team_name ? HOME[:colors] : AWAY[:colors]
+end
+
+def team_names
+  game_hash.values.map {|team| team[:team_name]}
+end
+
+def player_numbers(name)
+  HOME[:team_name] == name ? HOME[:players].map {|player| player[:number]} : AWAY[:players].map {|player| player[:number]}
+end
+
+def big_shoe_rebounds
+  team_players = game_hash.map {|key, value| value[:players]}
+  all_players = team_players[0] + team_players[1]
+  big_shoe_guy = all_players.sort_by{|player| player[:shoe]}[all_players.length - 1]
+  big_shoe_guy[:rebounds]
+end
+
+# def big_shoe_rebounds
+#   big_shoe = 0
+#   player_name = nil
+#   game_hash.values.each do |team|
+#     players = team[:players]
+#     players.each do |player|
+#       if player[:shoe] > big_shoe
+#         big_shoe = player[:shoe]
+#         player_name = player[:player_name]
+#       end
+#     end
+#   end
+#   stats = player_stats(player_name)
+#   stats[:rebounds]
+# end
+
+
+
+# puts num_points_scored("DeSagna Diop")
+# puts shoe_size("Kemba Walker")
+# puts team_colors("Brooklyn Nets")
+# puts team_names
+# puts player_numbers("Brooklyn Nets")
+puts big_shoe_rebounds
